@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ඩිජිටල් වෙසක් තොරණ | Gautama Buddha Charithaya Interactive Thorana</title>
+  <meta name="description" content="An interactive, high-fidelity digital Vesak Thorana depicting the Gautama Buddha Charithaya with premium LED animations, bilingual story panels, and synthesized traditional flute music.">
+  <!-- 🪔 Favicon (Vesak lamp emoji) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪔</text></svg>">
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for visual elegance -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <!-- 🛡️ Protection meta tags -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, nofollow">
+</head>
+<body>
+
+  <!-- Ambient background elements -->
+  <div class="sky-background">
+    <div class="stars"></div>
+    <div class="nebula-orange"></div>
+    <div class="nebula-blue"></div>
+  </div>
+
+  <!-- Decorative floating Vesak lanterns -->
+  <div class="floating-decorations" aria-hidden="true">
+    <div class="lantern" style="--d: 0s; --x: 10vw;">🪔</div>
+    <div class="lantern" style="--d: 4s; --x: 25vw;">🏮</div>
+    <div class="lantern" style="--d: 2s; --x: 75vw;">🪔</div>
+    <div class="lantern" style="--d: 6s; --x: 85vw;">🏮</div>
+  </div>
+
+  <!-- Initial Overlay to comply with Web Audio autoplay policies -->
+  <div id="initOverlay" class="init-overlay">
+    <div class="init-card">
+      <div class="dhamma-wheel">
+        <i class="fa-solid fa-dharmachakra"></i>
+      </div>
+      <h1 class="glow-text">ඩිජිටල් වෙසක් තොරණ</h1>
+      <h2 class="sub-glow">Gautama Buddha Charithaya</h2>
+      <p class="intro-desc">
+        තෙරුවන් සරණයි! Ktechpro by Kavindu Ishan දෙවන වරටත් ඉදිරිපත් කරනු ලබන ශ්‍රව්‍ය සහ දෘශ්‍ය LED ආලෝක රටා සහිත සජීවී ඩිජිටල් වෙසක් තොරණ අත්දැකීම ලබා ගැනීමට පහත බොත්තම ඔබන්න.
+      </p>
+      <p class="intro-desc-en">
+      May the Three Blessings be upon you! Click the button below to experience the live digital Vesak Pandal with audio and visual LED light patterns presented by Ktechpro by Kavindu Ishan for the second time.
+      </p>
+          <div class="visitor-name-section">
+        <label class="visitor-label">
+          <i class="fa-solid fa-user"></i> ඔබගේ නම / Your Name
+        </label>
+        <input 
+          type="text" 
+          id="inputVisitorName" 
+          class="visitor-input" 
+          placeholder="නම ඇතුළත් කරන්න..." 
+          maxlength="20"
+          autocomplete="off"
+        >
+        <p class="visitor-hint">
+          <i class="fa-solid fa-users"></i> 
+          <span id="lblOnlineCount">0</span> දෙනෙක් මේ මොහොතේ තොරණ දකිමින් සිටිති
+        </p>
+      </div>
+      <button id="btnIgnite" class="btn-ignite">
+        <span class="btn-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        තොරණ ආලෝකමත් කරන්න • Ignite Pandol
+      </button>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="wheel-spin"><i class="fa-solid fa-dharmachakra"></i></span>
+        <div>
+          <h1>ගෞතම බුද්ධ චරිතය</h1>
+          <p class="subtitle">The Life of Lord Gautama Buddha</p>
+        </div>
+        <!-- Buddhist Flag GIF -->
+          <img src="buddhist-flag.gif" alt="Buddhist Flag" class="buddhist-flag-img" />
+          <img src="srilanka-flag.gif" alt="Sri Lanka Flag" class="srilanka-flag-img" />
+      </div>
+      
+      <!-- Live indicator -->
+      <div class="header-status">
+        <div class="status-badge live">
+          <span class="pulse-dot"></span> Live
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN GRID - FULLSCREEN THORANA -->
+  <main class="main-grid fullscreen">
+      <div class="thorana-stage" id="thoranaStage">
+        <section class="display-card" id="displaySection">
+          <div class="canvas-wrapper">
+           <canvas id="thoranaCanvas" width="950" height="1100"></canvas>
+<!-- 🪔 Floating visitor lanterns layer -->
+        <div id="visitorsLayer" class="visitors-layer"></div>
+
+        <!-- 💡 Click hint message -->
+        <div id="clickHint" class="click-hint hidden">
+          <div class="hint-arrow">👆</div>
+          <div class="hint-text">
+            <strong>මෙහි ඇති චිත්‍ර මත ක්ලික් කරන්න</strong>
+            <small>Click on any chapter circle to read the story</small>
+          </div>
+        </div>
+        
+        <!-- 🕯️ Lit lamps display area -->
+        <div id="litLampsArea" class="lit-lamps-area"></div>
+        
+        <!-- 🪷 Floating wish lotuses layer -->
+        <div id="wishesLayer" class="wishes-layer"></div>
+            <div class="canvas-status-bar">
+              <!-- Status indicator - shows pattern + audio + live stats -->
+        <div class="canvas-status-bar">
+          <span><i class="fa-solid fa-circle-nodes"></i> Pattern: <strong id="lblActivePattern">Budhu Ras</strong></span>
+          <span><i class="fa-solid fa-music"></i> <strong id="lblAudioStatus">Auto Playing</strong></span>
+          <span class="live-stat" title="Live visitors right now">
+            <i class="fa-solid fa-eye"></i> 
+            <strong id="lblLiveOnline">0</strong> online
+          </span>
+          <span class="live-stat" title="Total visits today">
+            <i class="fa-solid fa-users"></i> 
+            <strong id="lblTotalToday">0</strong> today
+          </span>
+          
+          <!-- 🪷 Wishes Wall button -->
+          <button id="btnOpenWishes" class="btn-wishes-wall" title="Wishes Wall">
+            <span class="wish-btn-icon">🪷</span>
+            <span class="wish-btn-text">පැතුම් බිත්තිය</span>
+            <span class="wish-btn-count">
+              <i class="fa-solid fa-star"></i>
+              <span id="lblWishCount">0</span>
+            </span>
+          </button>
+          
+          <!-- 🪔 Light a Lamp button -->
+          <button id="btnLightLamp" class="btn-light-lamp" title="Light a Lamp">
+            <span class="lamp-btn-icon">🪔</span>
+            <span class="lamp-btn-text">පහන් දල්වන්න</span>
+            <span class="lamp-btn-count">
+              <i class="fa-solid fa-fire"></i>
+              <span id="lblLampCount">0</span>
+            </span>
+          </button>
+        </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+  </div>
+
+<!-- ============================================= -->
+  <!-- STORY SIDE PANEL (slides in from right when panel clicked) -->
+  <!-- ============================================= -->
+  <aside id="storyModal" class="story-side-panel">
+    <button id="btnCloseModal" class="modal-close" title="Close">×</button>
+    
+    <div class="story-header">
+      <span class="story-badge"><i class="fa-solid fa-book-open"></i> <span id="lblChapterNo">1</span></span>
+      <h3 id="storyTitleSi">සිද්ධාර්ථ කුමාරෝත්පත්තිය</h3>
+      <h4 id="storyTitleEn">The Birth of Prince Siddhartha</h4>
+    </div>
+    
+    <div class="story-scroll-area">
+      <div class="story-art-container" id="storyArtContainer">
+        <div id="storySvgPlaceholder"></div>
+      </div>
+      
+      <div class="story-narratives">
+        <div class="narrative-block si active" data-lang="si">
+          <p id="txtStorySi"></p>
+        </div>
+        <div class="narrative-block en" data-lang="en">
+          <p id="txtStoryEn"></p>
+        </div>
+      </div>
+      <!-- 🆕 Chapter gallery: 6 decorative images -->
+      <div class="chapter-gallery" id="chapterGallery"></div>
+    </div>
+    
+    <div class="story-footer">
+      <button id="btnPrevChapter" class="btn-secondary"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+      <button id="btnNextChapter" class="btn-secondary">Next <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </aside>
+
+  <!-- Background audio: place your audio file as "music.mp3" in same folder -->
+ <!-- Background audio -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Panel-specific audio (one per chapter) -->
+  <audio id="panelAudio1" preload="auto" loop><source src="w1.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio2" preload="auto" loop><source src="w2.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio3" preload="auto" loop><source src="w3.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio4" preload="auto" loop><source src="w4.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio5" preload="auto" loop><source src="w5.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio6" preload="auto" loop><source src="w6.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio7" preload="auto" loop><source src="w7.mp3" type="audio/mpeg"></audio>
+  <audio id="panelAudio8" preload="auto" loop><source src="w8.mp3" type="audio/mpeg"></audio>
+
+  <!-- Hidden footer (kept for code references but not visible) -->
+  <div style="display:none;">
+    <span id="lblLedCount">0</span>
+    <span id="lblActiveSpeed">1.0x</span>
+  </div>
+<!-- ============================================= -->
+  <!-- VESAK FOOTER — Quote (left) + Donation (right) -->
+  <!-- ============================================= -->
+  <footer class="vesak-footer">
+    <div class="footer-grid">
+      
+      <!-- LEFT: Buddhist Gatha -->
+      <div class="footer-card gatha-card">
+        <div class="gatha-header">
+          <i class="fa-solid fa-dharmachakra"></i>
+          <span>වෙසක් සමරු ගාථාව</span>
+        </div>
+        <div class="gatha-pali">
+          "සබ්බ පාපස්ස අකරණං<br>
+           කුසලස්ස උපසම්පදා<br>
+           සචිත්ත පරියෝදපනං<br>
+           ඒතං බුද්ධාන සාසනං"
+        </div>
+        <div class="gatha-meaning">
+          සියලු පව් නොකිරීම (පව් කිරීමෙන් වැළකීම),<br>
+          සියලු කුසල් රැස් කිරීම (පින් දහම්හි යෙදීම),<br>
+          තමාගේ සිත කෙලෙසුන්ගෙන් පිරිසිදු කර ගැනීම<br>
+          මෙය සියලු බුදුවරුන්ගේ අනුශාසනය/උපදේශයයි.
+        </div>
+        <div class="footer-credit">
+          <i class="fa-solid fa-heart"></i> Developer &amp; Designer: 
+          <strong>Kavindu Ishan</strong>
+        </div>
+        
+        <div class="footer-youtube">
+          <i class="fa-brands fa-youtube"></i>
+          ශ්‍රව්‍ය පටිගත කිරීම් — 
+          <strong>"මා විසින් මෙසේ අසන ලදී (ශ්‍රී සම්බුද්ධ චරිතය සජීවීකරණ චිත්‍රපටය)"</strong>
+          <span class="yt-channel">Shraddha TV</span>
+        </div>
+         <!-- 💬 Suggestions button -->
+        <button id="btnOpenSuggestions" class="btn-suggestions">
+          <i class="fa-solid fa-lightbulb"></i>
+          අදහස් / යෝජනා / චෝදනා ලබා දෙන්න
+        </button>
+      </div>
+      
+      <!-- RIGHT: Donation Canopy -->
+      <div class="footer-card donation-card" id="donationCanopy">
+        <div class="canopy-roof"></div>
+        <div class="canopy-lamps">
+          <span class="lamp">🪔</span>
+          <span class="lamp">🪔</span>
+          <span class="lamp">🪔</span>
+        </div>
+        <div class="canopy-content">
+          <div class="canopy-title">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            ආධාර ලබා දෙන ස්ථානය
+          </div>
+          <p class="canopy-subtitle">
+           ඔබ කැමති නම් පමණක් මාගේ උත්සාහය දෙස බලා ආධාරයක් කරන්න මෙය කිසිදු ලාබ ප්‍රයෝජනයක් සදහා නොවෙයි මුතු කුඩ සියයක් පන්සල් සියයකට ලබා දීමේ මහා පින්කමේ ආරම්භය සදහායි. මා උත්සාහ දරන්නේ විනාශ වී යන අපගේ රට ජාතිය මෙන්ම බෞද්ධ ශාසනය සහ නිර්මල වූ මේ දර්මස්කන්දය රක ගැනීමටයි. අමාමෑණි ශ්‍රී ගෞතම බුදු හිමියන්ගේ නිර්මල දහම තව චිරාත් කාලයක් ලොව හිත සුව පිණිස වැජබේවා 🙏<br>
+
+            <small>If you like, please consider my efforts and make a donation.
+This is not for any profit, but for the beginning of the great charity of giving a hundred pearl umbrellas to a hundred temples. I am trying to protect our country and nation, which is being destroyed, as well as the Buddhist system and this pure Dharma mountain. May the pure Dharma of the venerable Sri Gautama Buddha continue to flourish for the welfare of the world for a long time to come. 🙏</small>
+          </p>
+          <button id="btnOpenDonation" class="btn-donate">
+            <i class="fa-solid fa-heart"></i> ආධාර කරන්න
+          </button>
+          <p class="canopy-quote">
+            "දන් දෙන්නා සත්පුරුෂයෙකි"
+          </p>
+        </div>
+      </div>
+      
+    </div>
+  </footer>
+
+  <!-- ============================================= -->
+  <!-- DONATION MODAL (opens when ආදර කරන්න clicked) -->
+  <!-- ============================================= -->
+  <div id="donationModal" class="donation-modal hidden">
+    <div class="donation-modal-card">
+      <button id="btnCloseDonation" class="modal-close" title="Close">×</button>
+      
+      <div class="donation-header">
+        <div class="donation-lotus">🪷</div>
+        <h2>ආධාර කරන්න</h2>
+        <p class="donation-greeting">
+          ඔබ කැමති නම් පමණයි 🙏<br>
+          <small>Donations are completely voluntary</small>
+        </p>
+      </div>
+      <!-- Tab buttons -->
+      <div class="donation-tabs">
+        <button class="d-tab active" data-tab="qr">
+          <i class="fa-solid fa-qrcode"></i> QR Code
+        </button>
+        <button class="d-tab" data-tab="bank">
+          <i class="fa-solid fa-building-columns"></i> Bank Transfer
+        </button>
+      </div>
+      
+      <!-- QR Code Tab -->
+      <div class="d-tab-content active" id="dtab-qr">
+        <p class="qr-instruction">
+          📱 Mobile banking app එකේ QR code එක scan කරන්න
+        </p>
+        <div class="qr-options">
+          <div class="qr-option">
+            <img src="donate-qr-100.jpg" alt="Rs 100 QR" loading="lazy">
+            <div class="qr-amount">Rs. 100</div>
+          </div>
+          <div class="qr-option">
+            <img src="donate-qr-50.jpg" alt="Rs 50 QR" loading="lazy">
+            <div class="qr-amount">Rs. 50</div>
+          </div>
+        </div>
+        <p class="qr-note">
+          <i class="fa-solid fa-info-circle"></i>
+          LANKAQR ඕනෑම Sri Lankan mobile banking app එකකින් scan කරන්න පුළුවන්
+        </p>
+      </div>
+      
+      <!-- Bank Transfer Tab -->
+      <div class="d-tab-content" id="dtab-bank">
+        <p class="bank-instruction">
+          🏦 Direct bank transfer details
+        </p>
+        <div class="bank-details">
+          <div class="bank-row">
+            <span class="bank-label">Bank</span>
+            <span class="bank-value">Bank of Ceylon</span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Branch</span>
+            <span class="bank-value">Delgoda</span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Account Name</span>
+            <span class="bank-value">B A K I Balasooriya</span>
+          </div>
+          <div class="bank-row highlight">
+            <span class="bank-label">Account Number</span>
+            <span class="bank-value" id="bankAccountNum">63853816</span>
+            <button class="btn-copy" onclick="copyBankAccount()">
+              <i class="fa-solid fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+        <p class="bank-note">
+          💚 ඕනෑම මුදලක් — ඔබට කැමති නම් පමණයි
+        </p>
+      </div>
+      
+      <div class="donation-footer">
+        <p class="thank-you">
+          <i class="fa-solid fa-heart"></i>
+          සුවපත් වේවා! 🪷
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================= -->
+  <!-- 🪔 LIGHT A LAMP MODAL                         -->
+  <!-- ============================================= -->
+  <div id="lightLampModal" class="lamp-modal hidden">
+    <div class="lamp-modal-card">
+      <button id="btnCloseLamp" class="modal-close" title="Close">×</button>
+      
+      <div class="lamp-modal-header">
+        <div class="lamp-preview" id="lampPreview">
+          <div class="lamp-flame"></div>
+          <div class="lamp-base">🪔</div>
+        </div>
+        <h2>පහන් දල්වන්න</h2>
+        <p class="lamp-subtitle">
+          ඔබේ නමින් පහනක් දල්වන්න — මුළු වෙසක් සමය පුරාම පවතී 🪔<br>
+          <small>Light a lamp in your name — lasts the entire Vesak season</small>
+        </p>
+      </div>
+      
+      <div class="lamp-form">
+        <div class="lamp-field">
+          <label><i class="fa-solid fa-user"></i> ඔබගේ නම</label>
+          <input 
+            type="text" 
+            id="lampName" 
+            placeholder="ඔබගේ නම..." 
+            maxlength="25"
+            autocomplete="off"
+          >
+        </div>
+        
+        <div class="lamp-field">
+          <label><i class="fa-solid fa-palette"></i> පහනේ වර්ණය තෝරන්න</label>
+          <div class="lamp-color-options">
+            <button class="lamp-color-btn active" data-color="gold" style="--c: #ffaa00;">
+              <span class="color-dot"></span> රන්වන්
+            </button>
+            <button class="lamp-color-btn" data-color="red" style="--c: #ff3300;">
+              <span class="color-dot"></span> රතු
+            </button>
+            <button class="lamp-color-btn" data-color="orange" style="--c: #ff7700;">
+              <span class="color-dot"></span> තැඹිලි
+            </button>
+            <button class="lamp-color-btn" data-color="blue" style="--c: #00aaff;">
+              <span class="color-dot"></span> නිල්
+            </button>
+            <button class="lamp-color-btn" data-color="green" style="--c: #00cc66;">
+              <span class="color-dot"></span> කොළ
+            </button>
+            <button class="lamp-color-btn" data-color="purple" style="--c: #cc44ff;">
+              <span class="color-dot"></span> දම්
+            </button>
+          </div>
+        </div>
+        
+        <div class="lamp-field">
+          <label><i class="fa-solid fa-pray"></i> ඔබගේ පැතුම (අත්‍යවශ්‍ය නෑ)</label>
+          <input 
+            type="text" 
+            id="lampWish" 
+            placeholder="ඔබට කැමති නම් කෙටි පැතුමක්..."
+            maxlength="60"
+            autocomplete="off"
+          >
+          <div class="lamp-hint">📝 ඔබට පැතුමක් ලියන්න ඕන නැත්නම් හිස්ව තබන්න</div>
+        </div>
+        
+        <button id="btnSubmitLamp" class="btn-light-it">
+          <i class="fa-solid fa-fire"></i>
+          පහන දල්වන්න
+        </button>
+        
+        <div id="lampSuccessMsg" class="lamp-success hidden">
+          <div class="lamp-success-icon">🪔</div>
+          <p><strong>පහන දල්වුණා!</strong></p>
+          <p>ඔබගේ පහන වෙසක් කාලය පුරාවට දැල්වේ 🪷</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================= -->
+  <!-- 🪷 WISHES WALL MODAL                          -->
+  <!-- ============================================= -->
+  <div id="wishesModal" class="wishes-modal hidden">
+    <div class="wishes-modal-card">
+      <button id="btnCloseWishes" class="modal-close" title="Close">×</button>
+      
+      <div class="wishes-modal-header">
+        <div class="wishes-icon">🪷</div>
+        <h2>පැතුම් බිත්තිය</h2>
+        <p class="wishes-subtitle">
+          ඔබගේ පැතුම ලෝකය සමඟ බෙදාගන්න 🌸<br>
+          පැතුම් එක කල පසුව තොරණ ලග පෙන්වන මල් click කර බලන්න<br>
+          <small>Share your wish with the world</small>
+        </p>
+      </div>
+      
+      <!-- Tab buttons -->
+      <div class="wish-tabs">
+        <button class="w-tab active" data-tab="write">
+          <i class="fa-solid fa-pen"></i> ලියන්න
+        </button>
+        <button class="w-tab" data-tab="read">
+          <i class="fa-solid fa-book-open"></i> සියලු පැතුම්
+        </button>
+      </div>
+      
+      <!-- Write Tab -->
+      <div class="w-tab-content active" id="wtab-write">
+        <div class="wish-form">
+          <div class="wish-field">
+            <label><i class="fa-solid fa-user"></i> ඔබගේ නම</label>
+            <input 
+              type="text" 
+              id="wishName" 
+              placeholder="ඔබගේ නම..." 
+              maxlength="25"
+              autocomplete="off"
+            >
+          </div>
+          
+          <div class="wish-field">
+            <label><i class="fa-solid fa-heart"></i> ඔබගේ පැතුම</label>
+            <textarea 
+              id="wishMessage" 
+              placeholder="ඔබට කැමති පැතුමක් ලියන්න...&#10;Example: සියලු සත්වයෝ සුවපත් වෙත්වා!"
+              maxlength="150"
+              rows="4"
+            ></textarea>
+            <div class="wish-char-count">
+              <span id="wishCharCount">0</span> / 150
+            </div>
+          </div>
+          
+          <button id="btnSubmitWish" class="btn-submit-wish">
+            <i class="fa-solid fa-spa"></i>
+            පැතුම තැබීමට
+          </button>
+          
+          <div id="wishSuccessMsg" class="wish-success hidden">
+            <div class="wish-success-icon">🪷</div>
+            <p><strong>පැතුම ලැබුණා!</strong></p>
+            <p>ඔබගේ පැතුම තොරණ අසලින් පාවෙයි 🌸</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Read Tab - All wishes -->
+      <div class="w-tab-content" id="wtab-read">
+        <div class="wishes-list-header">
+          <span><strong id="wishListCount">0</strong> පැතුම්</span>
+          <span class="wishes-sort">
+            <i class="fa-solid fa-clock"></i> නවතම මුලින්
+          </span>
+        </div>
+        <div id="wishesList" class="wishes-list">
+          <div class="wishes-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            පැතුම් පටවමින්...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Wish details popup (when clicking a floating lotus) -->
+  <div id="wishDetail" class="wish-detail hidden">
+    <div class="wish-detail-card">
+      <button class="wish-detail-close">×</button>
+      <div class="wish-detail-lotus">🪷</div>
+      <div class="wish-detail-author" id="wishDetailAuthor"></div>
+      <div class="wish-detail-message" id="wishDetailMessage"></div>
+      <div class="wish-detail-time" id="wishDetailTime"></div>
+    </div>
+  </div>
+  
+  <!-- 🪔 Hover tooltip for lamps -->
+  <div id="lampTooltip" class="lamp-tooltip hidden">
+    <div class="tooltip-name"></div>
+    <div class="tooltip-wish"></div>
+    <div class="tooltip-time"></div>
+  </div>
+    <!-- ============================================= -->
+  <!-- 💬 SUGGESTIONS MODAL                          -->
+  <!-- ============================================= -->
+  <div id="suggestionsModal" class="suggestions-modal hidden">
+    <div class="suggestions-card">
+      <button id="btnCloseSuggestions" class="modal-close" title="Close">×</button>
+      
+      <div class="sug-header">
+        <div class="sug-icon">💡</div>
+        <h2>ඔබගේ අදහස් සහ යෝජනා</h2>
+        <p class="sug-subtitle">
+          ඔබගේ අගනා අදහස් අපිට ලබා දෙන්න 🪷<br>
+          <small>Your suggestions help us improve</small>
+        </p>
+      </div>
+      
+      <div class="sug-form">
+        <div class="sug-field">
+          <label><i class="fa-solid fa-user"></i> ඔබගේ නම</label>
+          <input 
+            type="text" 
+            id="sugName" 
+            placeholder="ඔබගේ නම ඇතුළත් කරන්න..." 
+            maxlength="30"
+            autocomplete="off"
+          >
+        </div>
+        
+        <div class="sug-field">
+          <label><i class="fa-solid fa-tags"></i> වර්ගය</label>
+          <div class="sug-type-buttons">
+            <button class="sug-type-btn active" data-type="suggestion">
+              💡 යෝජනාව
+            </button>
+            <button class="sug-type-btn" data-type="comment">
+              💬 අදහස
+            </button>
+            <button class="sug-type-btn" data-type="bug">
+              🐛 දෝෂයක්
+            </button>
+          </div>
+        </div>
+        
+        <div class="sug-field">
+          <label><i class="fa-solid fa-message"></i> ඔබගේ පණිවිඩය</label>
+          <textarea 
+            id="sugMessage" 
+            placeholder="ඔබට කැමති විදිහට ලියන්න..."
+            maxlength="500"
+            rows="5"
+          ></textarea>
+          <div class="sug-char-count">
+            <span id="sugCharCount">0</span> / 500
+          </div>
+        </div>
+        
+        <button id="btnSubmitSuggestion" class="btn-submit-sug">
+          <i class="fa-solid fa-paper-plane"></i>
+          යවන්න
+        </button>
+        
+        <div id="sugSuccessMsg" class="sug-success hidden">
+          <div class="sug-success-icon">🪷</div>
+          <p><strong>ස්තූතියි!</strong></p>
+          <p>ඔබගේ අදහස ලැබුණා. තෙරුවන් සරණයි!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Load core engine script -->
+  <script src="app.js"></script>
+</body>
+</html>
