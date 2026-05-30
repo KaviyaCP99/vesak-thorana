@@ -190,11 +190,11 @@
       }, 2000);  // Less frequent check
     }
 
-    // ── Console clear loop + warning ──
+    // ── Console clear loop + warning (reduced frequency) ──
     setInterval(() => {
       console.clear();
       console.log(SACRED_MSG);
-    }, 2000);
+    }, 10000);  // 2s → 10s (5x less load)
 
     // Initial console message
     console.log(SACRED_MSG);
@@ -1828,8 +1828,8 @@ function spawnQuote() {
     // Spawn first quote after ignite
     setTimeout(spawnQuote, 3000);
     
-    // Spawn new quote every 14 seconds (12s animation + 2s gap)
-    setInterval(spawnQuote, 14000);
+   // Spawn new quote every 20 seconds (less DOM churn)
+    setInterval(spawnQuote, 20000);
   }
 
   // Start quotes when ignited (hooks into existing ignite flow)
