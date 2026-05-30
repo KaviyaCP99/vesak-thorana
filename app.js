@@ -1289,21 +1289,30 @@ function stopPanelAudioAndResumeBg() {
       const clickY = ((e.clientY - rect.top) / rect.height) * canvas.height;
 
       let panelRadius = 285;
+      let closestPanel = -1;
+      let closestDistance = Infinity;
+      
+      // Find the CLOSEST panel to the click (not just any within range)
       for (let i = 0; i < 8; i++) {
         let angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
         let px = cx + panelRadius * Math.cos(angle);
         let py = cy + panelRadius * Math.sin(angle);
         let dist = Math.hypot(clickX - px, clickY - py);
-     if (dist <= 62) {
-          loadChapter(i + 1);
-          // Open the side panel + slide thorana left
-          const sidePanel = $('storyModal');
-          const stage = $('thoranaStage');
-          if (sidePanel) sidePanel.classList.add('open');
-          if (stage) stage.classList.add('split-view');
-          playPanelAudio(i + 1);
-          return;
+        
+        if (dist < closestDistance) {
+          closestDistance = dist;
+          closestPanel = i;
         }
+      }
+      
+      // Click is valid if within 90px of closest panel (generous tolerance)
+      if (closestPanel >= 0 && closestDistance <= 90) {
+        loadChapter(closestPanel + 1);
+        const sidePanel = $('storyModal');
+        const stage = $('thoranaStage');
+        if (sidePanel) sidePanel.classList.add('open');
+        if (stage) stage.classList.add('split-view');
+        playPanelAudio(closestPanel + 1);
       }
     });
 
