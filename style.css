@@ -4214,3 +4214,164 @@ canvas {
   filter: none;
   text-shadow: 0 0 4px var(--flame-color, #ffaa00);
 }
+/* ════════════════════════════════════════════
+   🌟 PERMANENT NOTIFICATION BANNER (above thorana)
+   ════════════════════════════════════════════ */
+.thorana-notice {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 8px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 50;
+}
+
+.notice-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(248, 208, 96, 0.12) 0%,
+    rgba(255, 119, 0, 0.15) 50%,
+    rgba(248, 208, 96, 0.12) 100%
+  );
+  border: 1px solid rgba(248, 208, 96, 0.4);
+  border-radius: 50px;
+  padding: 10px 22px;
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 4px 16px rgba(248, 208, 96, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: noticeGlow 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle shimmer effect across the banner */
+.notice-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: noticeShimmer 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes noticeGlow {
+  0%, 100% {
+    box-shadow: 
+      0 4px 16px rgba(248, 208, 96, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(248, 208, 96, 0.4);
+  }
+  50% {
+    box-shadow: 
+      0 6px 24px rgba(248, 208, 96, 0.3),
+      0 0 20px rgba(255, 119, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-color: rgba(248, 208, 96, 0.7);
+  }
+}
+
+@keyframes noticeShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.notice-icon {
+  font-size: 16px;
+  color: var(--color-gold-bright);
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+
+.notice-icon:last-child {
+  animation-delay: 1s;
+}
+
+.notice-text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.notice-text strong {
+  font-family: var(--font-sinhala);
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8d060;
+  text-shadow: 0 0 12px rgba(248, 208, 96, 0.4);
+}
+
+.notice-text span {
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  font-style: italic;
+  margin-top: 1px;
+  letter-spacing: 0.3px;
+}
+
+.notice-arrow {
+  font-size: 22px;
+  margin-top: 4px;
+  animation: arrowBounce 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(248, 208, 96, 0.5));
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .thorana-notice {
+    margin-bottom: 4px;
+    padding: 0 8px;
+  }
+  
+  .notice-content {
+    padding: 8px 14px;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .notice-text strong {
+    font-size: 12px;
+  }
+  
+  .notice-text span {
+    font-size: 10px;
+  }
+  
+  .notice-icon {
+    font-size: 14px;
+  }
+  
+  .notice-arrow {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .notice-text strong {
+    font-size: 11px;
+  }
+  
+  .notice-text span {
+    font-size: 9px;
+  }
+}

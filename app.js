@@ -2415,15 +2415,7 @@ function spawnQuote() {
       hintRemoved = true;
     }
   }
-  
-  // Hide hint when user clicks any panel (they got the message)
-  document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('thoranaCanvas');
-    if (canvas) {
-      canvas.addEventListener('click', hideClickHint);
-    }
-  });
-  
+    
   // Show hint 2 seconds after ignite (after thorana fades in)
   function watchForIgnite() {
     const checkLoop = setInterval(() => {
