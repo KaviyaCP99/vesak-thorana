@@ -4198,3 +4198,18 @@ canvas {
     margin-bottom: 16px !important;
   }
 }
+/* ════════════════════════════════════════════
+   🪔 PERFORMANCE: Light mode for older lamps
+   ════════════════════════════════════════════ */
+
+/* Lamps marked as "lite" use cheaper effects */
+.lit-lamp.lite .lit-lamp-flame {
+  animation-duration: 1.5s;  /* Slower */
+  filter: none;  /* Remove expensive filter */
+  box-shadow: 0 0 6px var(--flame-color, #ffaa00);  /* Cheaper alternative */
+}
+
+.lit-lamp.lite .lit-lamp-base {
+  filter: none;
+  text-shadow: 0 0 4px var(--flame-color, #ffaa00);
+}

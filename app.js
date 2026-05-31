@@ -2118,13 +2118,15 @@ function spawnQuote() {
     
     // Build new HTML
     let html = '';
-    visibleLamps.forEach(id => {
+    visibleLamps.forEach((id, idx) => {
       const lamp = lampsData[id];
       if (!lamp) return;
       const color = LAMP_COLORS[lamp.color] || LAMP_COLORS.gold;
       const safeName = (lamp.name || '').replace(/[<>"']/g, '');
+      // First 30 lamps = beautiful glow, rest = lite mode for performance
+      const liteClass = idx >= 30 ? ' lite' : '';
       html += `
-        <div class="lit-lamp" style="--flame-color: ${color}" data-name="${safeName}" data-wish="${(lamp.wish || '').replace(/[<>"']/g, '')}">
+        <div class="lit-lamp${liteClass}" style="--flame-color: ${color}" data-name="${safeName}" data-wish="${(lamp.wish || '').replace(/[<>"']/g, '')}">
           <span class="lit-lamp-name">${safeName}</span>
           <div class="lit-lamp-flame"></div>
           <span class="lit-lamp-base">🪔</span>
