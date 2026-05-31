@@ -2297,7 +2297,7 @@ function spawnQuote() {
     wishIds.sort((a, b) => (wishesData[b].timestamp || 0) - (wishesData[a].timestamp || 0));
     
     // ── Render floating lotuses (most recent 25) ──
-    const visibleWishes = wishIds.slice(0, 25);
+    const visibleWishes = wishIds.slice(0, 15);
     let lotusHTML = '';
     visibleWishes.forEach((id, idx) => {
       const wish = wishesData[id];
