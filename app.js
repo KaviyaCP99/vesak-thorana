@@ -2428,4 +2428,75 @@ function spawnQuote() {
   
   watchForIgnite();
 
+  // ════════════════════════════════════════════════════════════
+  // ⏰ FINAL DAYS COUNTDOWN — Until Vesak ends June 5 midnight
+  // ════════════════════════════════════════════════════════════
+  
+  // Vesak ends: June 5, 2025 at 11:59:59 PM Sri Lanka time (UTC+5:30)
+  const VESAK_END_DATE = new Date('2025-06-05T23:59:59+05:30').getTime();
+  
+  function updateCountdown() {
+    const countdown = document.getElementById('vesakCountdown');
+    const daysEl = document.getElementById('cdDays');
+    const hoursEl = document.getElementById('cdHours');
+    const minutesEl = document.getElementById('cdMinutes');
+    const secondsEl = document.getElementById('cdSeconds');
+    
+    if (!countdown || !daysEl) return;
+    
+    const now = Date.now();
+    const distance = VESAK_END_DATE - now;
+    
+    // Check if Vesak has ended
+    if (distance <= 0) {
+      countdown.classList.add('ended');
+      countdown.classList.remove('critical');
+      daysEl.textContent = '00';
+      hoursEl.textContent = '00';
+      minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
+      
+      // Update label
+      const label = countdown.querySelector('.countdown-label span');
+      const labelEn = countdown.querySelector('.countdown-label small');
+      if (label) label.textContent = 'වෙසක් 2025 අවසන් විය';
+      if (labelEn) labelEn.textContent = 'Vesak 2025 has ended';
+      
+      // Trigger Vesak end celebration
+      if (!window.vesakEndTriggered) {
+        window.vesakEndTriggered = true;
+        triggerVesakEndCeremony();
+      }
+      return;
+    }
+    
+    // Calculate time units
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    daysEl.textContent = String(days).padStart(2, '0');
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
+    
+    // Critical state if less than 24 hours
+    if (distance < 24 * 60 * 60 * 1000) {
+      countdown.classList.add('critical');
+    } else {
+      countdown.classList.remove('critical');
+    }
+  }
+  
+  // Update countdown every second
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  
+  // Placeholder for end ceremony (built next)
+  function triggerVesakEndCeremony() {
+    console.log('🪔 Vesak 2025 has ended — beginning fade-out ceremony');
+    // Will be implemented with fireworks feature
+  }
+
 })();

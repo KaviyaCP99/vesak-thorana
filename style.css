@@ -4459,3 +4459,220 @@ canvas {
     font-size: 20px;
   }
 }
+/* ════════════════════════════════════════════
+   ⏰ FINAL DAYS COUNTDOWN BADGE
+   ════════════════════════════════════════════ */
+.vesak-countdown {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 10px auto;
+  padding: 12px 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(204, 0, 34, 0.15) 0%,
+    rgba(255, 119, 0, 0.18) 50%,
+    rgba(204, 0, 34, 0.15) 100%
+  );
+  border: 1px solid rgba(255, 119, 0, 0.5);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 6px 20px rgba(255, 119, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: countdownPulse 3s ease-in-out infinite;
+}
+
+.vesak-countdown::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 215, 0, 0.1) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: countdownShimmer 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes countdownPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(255, 119, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 8px 28px rgba(255, 119, 0, 0.45), 0 0 30px rgba(255, 119, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+}
+
+@keyframes countdownShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.countdown-label {
+  font-family: var(--font-sinhala);
+  font-size: 13px;
+  color: #ffaa00;
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.countdown-label i {
+  margin-right: 6px;
+  animation: hourglassFlip 2s ease-in-out infinite;
+}
+
+@keyframes hourglassFlip {
+  0%, 50%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(180deg); }
+}
+
+.countdown-label small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: rgba(255, 170, 0, 0.6);
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.countdown-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+
+.time-num {
+  font-family: 'Courier New', monospace;
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+  line-height: 1;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  min-width: 44px;
+  text-align: center;
+}
+
+.time-label {
+  font-family: var(--font-sinhala);
+  font-size: 9px;
+  color: rgba(255, 170, 0, 0.7);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.time-sep {
+  font-size: 20px;
+  color: rgba(255, 215, 0, 0.5);
+  font-weight: 700;
+  animation: sepBlink 1s ease-in-out infinite;
+}
+
+@keyframes sepBlink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* When countdown is critical (< 24 hrs) - urgent red */
+.vesak-countdown.critical {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 0, 0.2) 0%,
+    rgba(255, 100, 0, 0.25) 50%,
+    rgba(255, 0, 0, 0.2) 100%
+  );
+  border-color: rgba(255, 50, 50, 0.7);
+  animation: criticalPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(255, 50, 50, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 36px rgba(255, 50, 50, 0.6), 0 0 40px rgba(255, 100, 0, 0.4);
+  }
+}
+
+.vesak-countdown.critical .time-num {
+  color: #ff4400;
+  text-shadow: 0 0 20px rgba(255, 68, 0, 0.8);
+}
+
+/* Ended state (after June 5 midnight) */
+.vesak-countdown.ended {
+  background: linear-gradient(
+    135deg,
+    rgba(100, 100, 100, 0.15) 0%,
+    rgba(150, 150, 150, 0.2) 100%
+  );
+  border-color: rgba(200, 200, 200, 0.3);
+  animation: none;
+}
+
+.vesak-countdown.ended .countdown-label {
+  color: #999;
+}
+
+.vesak-countdown.ended .time-num {
+  color: #888;
+  text-shadow: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .vesak-countdown {
+    padding: 10px 14px;
+    max-width: 95%;
+  }
+  
+  .countdown-label {
+    font-size: 11px;
+  }
+  
+  .countdown-label small {
+    font-size: 9px;
+  }
+  
+  .time-num {
+    font-size: 18px;
+    padding: 3px 6px;
+    min-width: 34px;
+  }
+  
+  .time-label {
+    font-size: 8px;
+  }
+  
+  .countdown-time {
+    gap: 4px;
+  }
+  
+  .time-sep {
+    font-size: 14px;
+  }
+  
+  .time-unit {
+    min-width: 38px;
+  }
+}
