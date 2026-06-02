@@ -4646,12 +4646,14 @@ canvas {
     max-width: 95%;
   }
   
-  .countdown-label {
-    font-size: 11px;
+.countdown-label {
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 0 4px;
   }
   
   .countdown-label small {
-    font-size: 9px;
+    font-size: 8px;
   }
   
   .time-num {
