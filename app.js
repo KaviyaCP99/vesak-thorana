@@ -2493,10 +2493,137 @@ function spawnQuote() {
   updateCountdown();
   setInterval(updateCountdown, 1000);
   
-  // Placeholder for end ceremony (built next)
-  function triggerVesakEndCeremony() {
-    console.log('🪔 Vesak 2025 has ended — beginning fade-out ceremony');
-    // Will be implemented with fireworks feature
+  // ════════════════════════════════════════════════════════════
+  // 🎆 JUNE 5 MIDNIGHT CELEBRATION + FADE OUT CEREMONY
+  // ════════════════════════════════════════════════════════════
+  
+  let celebrationStarted = false;
+  let endingTriggered = false;
+  
+  function checkCelebrationTime() {
+    const now = Date.now();
+    const fiveMinutesBeforeEnd = VESAK_END_DATE - (5 * 60 * 1000);  // 11:55 PM
+    
+    // Start celebration 5 minutes before midnight
+    if (now >= fiveMinutesBeforeEnd && now < VESAK_END_DATE && !celebrationStarted) {
+      celebrationStarted = true;
+      startCelebration();
+    }
   }
+  
+  function startCelebration() {
+    console.log('🎆 Vesak celebration begins!');
+    const layer = document.getElementById('celebrationLayer');
+    if (!layer) return;
+    
+    layer.classList.remove('hidden');
+    
+    // Fireworks every 800ms
+    const fireworkInterval = setInterval(() => {
+      if (Date.now() >= VESAK_END_DATE) {
+        clearInterval(fireworkInterval);
+        return;
+      }
+      spawnFirework();
+    }, 800);
+    
+    // Lotus petals every 400ms
+    const petalInterval = setInterval(() => {
+      if (Date.now() >= VESAK_END_DATE) {
+        clearInterval(petalInterval);
+        return;
+      }
+      spawnLotusPetal();
+    }, 400);
+  }
+  
+  function spawnFirework() {
+    const layer = document.getElementById('celebrationLayer');
+    if (!layer) return;
+    
+    const colors = ['#ffd700', '#ff44aa', '#00aaff', '#ff7700', '#cc44ff', '#00ff88', '#ff3300'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.style.color = color;
+    fw.style.left = (10 + Math.random() * 80) + '%';
+    fw.style.top = (10 + Math.random() * 50) + '%';
+    
+    layer.appendChild(fw);
+    
+    setTimeout(() => fw.remove(), 1500);
+  }
+  
+  function spawnLotusPetal() {
+    const layer = document.getElementById('celebrationLayer');
+    if (!layer) return;
+    
+    const petalEmojis = ['🪷', '🌸', '🌺', '🌷', '✨'];
+    const emoji = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+    
+    const petal = document.createElement('div');
+    petal.className = 'falling-petal';
+    petal.textContent = emoji;
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.setProperty('--fall-duration', (5 + Math.random() * 5) + 's');
+    petal.style.fontSize = (20 + Math.random() * 20) + 'px';
+    
+    layer.appendChild(petal);
+    
+    setTimeout(() => petal.remove(), 10000);
+  }
+  
+  // Replace the placeholder triggerVesakEndCeremony
+  function triggerVesakEndCeremony() {
+    if (endingTriggered) return;
+    endingTriggered = true;
+    
+    console.log('🌙 Vesak ended — beginning fade out ceremony');
+    
+    // Stop celebration
+    const celebrationLayer = document.getElementById('celebrationLayer');
+    if (celebrationLayer) {
+      celebrationLayer.classList.add('hidden');
+    }
+    
+    // Add lamp indices for staggered fade
+    document.querySelectorAll('.lit-lamp').forEach((lamp, idx) => {
+      lamp.style.setProperty('--lamp-idx', idx);
+    });
+    
+    // Start global fade
+    document.body.classList.add('vesak-ended');
+    
+    // Fade out background music
+    const bgAudio = document.getElementById('bgAudio');
+    if (bgAudio) {
+      let volume = bgAudio.volume;
+      const fadeAudio = setInterval(() => {
+        volume -= 0.02;
+        if (volume <= 0) {
+          bgAudio.volume = 0;
+          bgAudio.pause();
+          clearInterval(fadeAudio);
+        } else {
+          bgAudio.volume = volume;
+        }
+      }, 1000);  // Slow fade over 50 seconds
+    }
+    
+    // Show ending overlay after 30 seconds of fade
+    setTimeout(() => {
+      const overlay = document.getElementById('endingOverlay');
+      if (overlay) {
+        overlay.classList.remove('hidden');
+        // Force reflow for transition
+        void overlay.offsetWidth;
+        overlay.classList.add('show');
+      }
+    }, 30000);
+  }
+  
+  // Check celebration timing every second
+  setInterval(checkCelebrationTime, 1000);
 
 })();

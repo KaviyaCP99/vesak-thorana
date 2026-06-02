@@ -4678,3 +4678,287 @@ canvas {
     min-width: 38px;
   }
 }
+/* ════════════════════════════════════════════
+   🎆 JUNE 5 MIDNIGHT CELEBRATION
+   ════════════════════════════════════════════ */
+.celebration-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.celebration-layer.hidden {
+  display: none;
+}
+
+/* Fireworks */
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.firework::before,
+.firework::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: fireworkExplode 1.5s ease-out forwards;
+}
+
+@keyframes fireworkExplode {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 
+      0 -40px 0 -2px currentColor,
+      28px -28px 0 -2px currentColor,
+      40px 0 0 -2px currentColor,
+      28px 28px 0 -2px currentColor,
+      0 40px 0 -2px currentColor,
+      -28px 28px 0 -2px currentColor,
+      -40px 0 0 -2px currentColor,
+      -28px -28px 0 -2px currentColor;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+    box-shadow: 
+      0 -120px 0 -4px transparent,
+      85px -85px 0 -4px transparent,
+      120px 0 0 -4px transparent,
+      85px 85px 0 -4px transparent,
+      0 120px 0 -4px transparent,
+      -85px 85px 0 -4px transparent,
+      -120px 0 0 -4px transparent,
+      -85px -85px 0 -4px transparent;
+  }
+}
+
+/* Falling lotus petals */
+.falling-petal {
+  position: absolute;
+  font-size: 28px;
+  top: -50px;
+  pointer-events: none;
+  animation: petalFall var(--fall-duration, 8s) linear forwards;
+  opacity: 0.9;
+}
+
+@keyframes petalFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ════════════════════════════════════════════
+   🌙 VESAK ENDED - FADE OUT EVERYTHING
+   ════════════════════════════════════════════ */
+
+/* When Vesak ends, fade entire experience */
+body.vesak-ended {
+  animation: globalFade 60s ease-out forwards;
+}
+
+@keyframes globalFade {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    filter: brightness(0.5) saturate(0.6);
+  }
+  100% {
+    filter: brightness(0.15) saturate(0.3);
+  }
+}
+
+/* Lamps fade out one by one */
+body.vesak-ended .lit-lamp {
+  animation: lampFadeOut 3s ease-out forwards;
+  animation-delay: calc(var(--lamp-idx, 0) * 0.05s);
+}
+
+@keyframes lampFadeOut {
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+    filter: blur(2px);
+  }
+}
+
+/* Canvas fades */
+body.vesak-ended #thoranaCanvas {
+  transition: opacity 30s ease-out, filter 30s ease-out;
+  opacity: 0.15;
+  filter: blur(3px) brightness(0.3);
+}
+
+/* Hide interactive buttons after end */
+body.vesak-ended .btn-light-lamp,
+body.vesak-ended .btn-wishes-wall,
+body.vesak-ended .btn-suggestions {
+  opacity: 0.2;
+  pointer-events: none;
+  transition: opacity 5s ease-out;
+}
+
+/* ════════════════════════════════════════════
+   🪔 SACRED ENDING OVERLAY
+   ════════════════════════════════════════════ */
+.ending-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  background: radial-gradient(ellipse at center, #1a0a30 0%, #000 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  opacity: 0;
+  transition: opacity 4s ease-in;
+}
+
+.ending-overlay.hidden {
+  display: none;
+}
+
+.ending-overlay.show {
+  opacity: 1;
+}
+
+.ending-content {
+  text-align: center;
+  max-width: 600px;
+  animation: endingFadeUp 3s ease-out;
+}
+
+@keyframes endingFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ending-lotus {
+  font-size: 80px;
+  margin-bottom: 24px;
+  animation: lotusFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(255, 136, 221, 0.6));
+}
+
+.ending-overlay h2 {
+  font-family: var(--font-sinhala);
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffd700;
+  margin-bottom: 12px;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.ending-overlay h3 {
+  font-family: var(--font-sinhala);
+  font-size: 18px;
+  color: #ffaa00;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.ending-message {
+  font-family: var(--font-sinhala);
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.ending-message-en {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.ending-blessing {
+  font-family: var(--font-sinhala);
+  font-size: 17px;
+  color: #ff88dd;
+  padding: 20px;
+  background: rgba(204, 68, 255, 0.08);
+  border: 1px solid rgba(255, 136, 221, 0.3);
+  border-radius: 16px;
+  margin: 24px 0;
+  font-weight: 600;
+}
+
+.ending-blessing small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: rgba(255, 136, 221, 0.7);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.ending-credit {
+  font-family: var(--font-sinhala);
+  font-size: 14px;
+  color: var(--color-gold-bright);
+  margin-top: 30px;
+}
+
+.ending-credit small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ending-overlay h2 {
+    font-size: 26px;
+  }
+  
+  .ending-overlay h3 {
+    font-size: 15px;
+  }
+  
+  .ending-lotus {
+    font-size: 60px;
+  }
+  
+  .ending-message {
+    font-size: 14px;
+  }
+  
+  .ending-blessing {
+    font-size: 14px;
+    padding: 16px;
+  }
+}
