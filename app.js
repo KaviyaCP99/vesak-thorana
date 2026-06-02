@@ -2433,7 +2433,7 @@ function spawnQuote() {
   // ════════════════════════════════════════════════════════════
   
   // Vesak ends: June 5, 2025 at 11:59:59 PM Sri Lanka time (UTC+5:30)
-  const VESAK_END_DATE = new Date('2025-06-05T23:59:59+05:30').getTime();
+  const VESAK_END_DATE = new Date('2026-06-05T23:59:59+05:30').getTime();
   
   function updateCountdown() {
     const countdown = document.getElementById('vesakCountdown');
@@ -2459,8 +2459,8 @@ function spawnQuote() {
       // Update label
       const label = countdown.querySelector('.countdown-label span');
       const labelEn = countdown.querySelector('.countdown-label small');
-      if (label) label.textContent = 'වෙසක් 2025 අවසන් විය';
-      if (labelEn) labelEn.textContent = 'Vesak 2025 has ended';
+      if (label) label.textContent = 'බුද්ධ වර්ෂ 2570 වැනි වෙසක් ඩිජිටල් තොරණ අවසන් වීමට';
+      if (labelEn) labelEn.textContent = 'The Vesak Digital Pandal for the year 2570 of the Buddha is about to end.';
       
       // Trigger Vesak end celebration
       if (!window.vesakEndTriggered) {
