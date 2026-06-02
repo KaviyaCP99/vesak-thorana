@@ -4375,3 +4375,87 @@ canvas {
     font-size: 9px;
   }
 }
+/* ════════════════════════════════════════════
+   🪷 HEARTFELT VESAK MESSAGE (footer)
+   ════════════════════════════════════════════ */
+.vesak-message {
+  margin-top: 18px;
+  padding: 16px 14px;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(248, 208, 96, 0.06),
+    rgba(255, 136, 221, 0.04),
+    rgba(248, 208, 96, 0.06)
+  );
+  border-top: 1px solid rgba(248, 208, 96, 0.15);
+  border-bottom: 1px solid rgba(248, 208, 96, 0.15);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vesak-message::before {
+  content: "❋";
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  color: rgba(248, 208, 96, 0.4);
+  font-size: 12px;
+}
+
+.vesak-message::after {
+  content: "❋";
+  position: absolute;
+  bottom: 4px;
+  right: 12px;
+  color: rgba(248, 208, 96, 0.4);
+  font-size: 12px;
+}
+
+.vesak-message-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  animation: lotusFloat 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.vesak-message-text {
+  font-family: var(--font-sinhala);
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(248, 208, 96, 0.85);
+  margin-bottom: 6px;
+  font-style: italic;
+  text-shadow: 0 0 12px rgba(248, 208, 96, 0.2);
+}
+
+.vesak-message-en {
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+/* Mobile - smaller text */
+@media (max-width: 768px) {
+  .vesak-message {
+    margin-top: 14px;
+    padding: 14px 10px;
+  }
+  
+  .vesak-message-text {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  
+  .vesak-message-en {
+    font-size: 10px;
+  }
+  
+  .vesak-message-icon {
+    font-size: 20px;
+  }
+}
