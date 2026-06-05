@@ -2619,6 +2619,27 @@ function spawnQuote() {
         // Force reflow for transition
         void overlay.offsetWidth;
         overlay.classList.add('show');
+        
+        // 🎵 Start ending meditation music (fade in)
+        const endingMusic = document.getElementById('endingMusic');
+        if (endingMusic) {
+          endingMusic.volume = 0;  // Start silent
+          endingMusic.play().catch(err => {
+            console.log('Auto-play blocked, music will start on interaction');
+          });
+          
+          // Fade in over 8 seconds
+          let vol = 0;
+          const fadeIn = setInterval(() => {
+            vol += 0.05;
+            if (vol >= 0.7) {  // Max volume 70%
+              endingMusic.volume = 0.7;
+              clearInterval(fadeIn);
+            } else {
+              endingMusic.volume = vol;
+            }
+          }, 400);  // 0.05 every 400ms = 5.6 seconds to reach 0.7
+        }
       }
     }, 30000);
   }
